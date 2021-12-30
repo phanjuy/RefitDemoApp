@@ -20,6 +20,13 @@ namespace SimpleApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(policy =>
+            {
+                policy.AddPolicy("OpenCorsPolicy", opt =>
+                    opt.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimpleApi", Version = "v1" });
@@ -37,6 +44,7 @@ namespace SimpleApi
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("OpenCorsPolicy");
 
             app.UseRouting();
 
